@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Req, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Req, UseGuards, Get } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { RateLimitGuard, RateLimit } from '../rate-limit/rate-limit.guard';
@@ -69,6 +69,40 @@ export class UsersController {
       req.socket.remoteAddress,
     );
     return this.usersService.signIn(body.email, body.password, ip);
+  }
+
+  @Get('/ip')
+  getIp(@Req() req: Request) {
+    // Get IP from request headers or connection
+    const forwardedFor = req.headers['x-forwarded-for'];
+    const ip = Array.isArray(forwardedFor)
+      ? forwardedFor[0]
+      : forwardedFor || req.ip || req.socket.remoteAddress;
+    console.log('🚀 ~ getIp ~ ip:', ip);
+    console.log('🚀 ~ getIp ~ forwardedFor:', forwardedFor);
+    console.log('🚀 ~ getIp ~ req.ip:', req.ip);
+    console.log(
+      '🚀 ~ getIp ~ req.socket.remoteAddress:',
+      req.socket.remoteAddress,
+    );
+    return ip;
+  }
+
+  @Post('/ip2')
+  getIp2(@Req() req: Request) {
+    // Get IP from request headers or connection
+    const forwardedFor = req.headers['x-forwarded-for'];
+    const ip = Array.isArray(forwardedFor)
+      ? forwardedFor[0]
+      : forwardedFor || req.ip || req.socket.remoteAddress;
+    console.log('🚀 ~ getIp2 ~ ip:', ip);
+    console.log('🚀 ~ getIp2 ~ forwardedFor:', forwardedFor);
+    console.log('🚀 ~ getIp2 ~ req.ip:', req.ip);
+    console.log(
+      '🚀 ~ getIp2 ~ req.socket.remoteAddress:',
+      req.socket.remoteAddress,
+    );
+    return ip;
   }
 
   @Post('signup')
