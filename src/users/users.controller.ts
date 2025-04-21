@@ -57,7 +57,17 @@ export class UsersController {
     },
   })
   async signIn(@Body() body: SignInBody, @Req() req: Request) {
-    const ip = req.ip || '127.0.0.1';
+    const forwardedFor = req.headers['x-forwarded-for'];
+    const ip = Array.isArray(forwardedFor)
+      ? forwardedFor[0]
+      : forwardedFor || req.ip || req.socket.remoteAddress || '127.0.0.1';
+    console.log('🚀 ~ signIn ~ ip:', ip);
+    console.log('🚀 ~ signIn ~ forwardedFor:', forwardedFor);
+    console.log('🚀 ~ signIn ~ req.ip:', req.ip);
+    console.log(
+      '🚀 ~ signIn ~ req.socket.remoteAddress:',
+      req.socket.remoteAddress,
+    );
     return this.usersService.signIn(body.email, body.password, ip);
   }
 
